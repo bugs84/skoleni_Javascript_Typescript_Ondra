@@ -22,18 +22,23 @@ class Todo {
 }
 
 // STORAGE
-class Storage {
+class StorageService {
+
+    constructor(storageDao) {
+        this.storageDao = storageDao
+    }
+
     saveModel = (model) => {
         const value = JSON.stringify(Array.from(model.todos.entries())); // ouch :(
-        localStorage.setItem('todos', value)
+        storageDao.saveTodos(value)
     }
 
     loadModel = () => {
         const model = new Model()
-        const todosString = localStorage.getItem('todos');
+        const todosString = storageDao.loadTodos()
         try {
             const todos = JSON.parse(todosString)
-                model.todos = new Map(todos)
+            model.todos = new Map(todos)
         } catch (e) {
             console.error(e)
             model.addTodo(new Todo("Koupit Jablka"))
@@ -44,8 +49,37 @@ class Storage {
     }
 }
 
+class LocalStorageDao {
+
+    saveTodos = (todosString) => {
+        localStorage.setItem('todos', todosString)
+    }
+
+    loadTodos = () => {
+        return localStorage.getItem('todos')
+    }
+}
+
+class ServerStorageDao {
+
+    saveTodos = (todosString) => {
+        localStorage.setItem('todos', todosString)
+    }
+
+    loadTodos = () => {
+        return localStorage.getItem('todos')
+    }
+}
+
+
+
 // APPLICATION
-const storage = new Storage()
+
+
+// const storageDao = new LocalStorageDao() //THIS CAN BE EXENGED
+const storageDao = new ServerStorageDao() //THIS CAN BE EXENGED
+
+const storage = new StorageService()
 
 const model = storage.loadModel()
 
@@ -69,7 +103,7 @@ function render() {
             removeButton.setAttribute("onclick", `removeTodo("${todo.id}")`)
             removeButton.textContent = "delete"
             todoDiv.appendChild(removeButton)
-        
+
             todosDiv.appendChild(todoDiv)
         }
     )
