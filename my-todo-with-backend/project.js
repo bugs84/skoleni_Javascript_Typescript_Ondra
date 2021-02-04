@@ -20,9 +20,29 @@ const requestListener = function (req, res) {
                     res.end(contents);
                 })
             break
-        case "/authors":
-            res.writeHead(200);
-            res.end(authors);
+        case "/todos":
+            switch (req.method) {
+                case "GET" :
+                    fs.readFile(__dirname + "/storage/todos.json")
+                        .then(contents => {
+                            res.setHeader("Content-Type", "application/json");
+                            res.writeHead(200);
+                            res.end(contents);
+                        })
+                    break
+                case "POST" :
+                    let body = [];
+                    req.on('data', (chunk) => {
+                        body.push(chunk);
+                    }).on('end', () => {
+                        body = Buffer.concat(body).toString();
+                        // at this point, `body` has the entire request body stored in it as a string
+                        fs.writeFile(__dirname + "/storage/todos.json", body)
+                        res.writeHead(204);
+                        res.end();
+                    });
+                    break
+            }
             break
         default:
             res.writeHead(404);
