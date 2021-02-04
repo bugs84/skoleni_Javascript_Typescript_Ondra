@@ -1,22 +1,23 @@
 'use strict';
 
 function addNewTodo() {
-    const todosDiv = document.getElementById("todos")
-    const newTodoDiv = document.createElement("div")
-    newTodoDiv.setAttribute("class", "todo")
+
+
+
+    const todoDiv = document.createElement("div")
+    // todoDiv.setAttribute("class", "todo")
 
     const todoTextDiv = document.getElementById("todoText")
 
-    newTodoDiv.innerHTML = `
-    <span>${todoTextDiv.value}</span><button>aaa</button>
-    `
+    todoDiv.innerHTML =todoTextDiv.value
 
-    todoTextDiv.value = ""
+    // todoTextDiv.value = ""
 
-    todosDiv.appendChild(newTodoDiv)
 
-}
-
-function addNewTodo(remove) {
+    document.getElementById("todos").appendChild(todoDiv)
 
 }
+
+// function addNewTodo(remove) {
+//
+// }
