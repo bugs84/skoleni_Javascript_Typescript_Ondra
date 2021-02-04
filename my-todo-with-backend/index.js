@@ -91,8 +91,8 @@ class ServerStorageDao {
 // APPLICATION
 
 
-const storageDao = new LocalStorageDao() //THIS CAN BE EXENGED
-// const storageDao = new ServerStorageDao() //THIS CAN BE EXENGED
+// const storageDao = new LocalStorageDao() //THIS CAN BE EXCHANGED
+const storageDao = new ServerStorageDao() //THIS CAN BE EXCHANGED
 
 const storage = new StorageService()
 
