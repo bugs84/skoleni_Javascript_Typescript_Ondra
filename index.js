@@ -1,7 +1,8 @@
 'use strict';
 
+// MODEL
 class Model {
-    todos = new Map()
+    todos = new Map() //map is not best if we want change order of todos, but i want try to use Map
 
     addTodo = (todo) => {
         this.todos.set(todo.id, todo)
@@ -20,15 +21,43 @@ class Todo {
     }
 }
 
-const model = new Model()
-model.addTodo(new Todo("Koupit Jablka"))
-model.addTodo(new Todo("Vyluxovat"))
-model.addTodo(new Todo("Zalít kytky"))
+// STORAGE
+class Storage {
+    saveModel = (model) => {
+        const value = JSON.stringify(Array.from(model.todos.entries())); // ouch :(
+        localStorage.setItem('todos', value)
+    }
+
+    loadModel = () => {
+        const model = new Model()
+        const todosString = localStorage.getItem('todos');
+        try {
+            const todos = JSON.parse(todosString)
+            // if(typeof new Map() === todos) {
+                model.todos = new Map(todos)
+            // } else {
+            //     model.todos = new Map()
+            // }
+
+        } catch (e) {
+            console.error(e)
+            model.addTodo(new Todo("Koupit Jablka"))
+            model.addTodo(new Todo("Vyluxovat"))
+            model.addTodo(new Todo("Zalít kytky"))
+        }
+        return model
+    }
+}
 
 
-console.log("MODEL")
-console.log(model)
+// APPLICATION
+const storage = new Storage()
 
+const model = storage.loadModel()
+
+function saveModel() {
+    storage.saveModel(model)
+}
 
 function render() {
 
@@ -37,9 +66,17 @@ function render() {
 
     model.todos.forEach((todo) => {
             const todoDiv = document.createElement("div")
-            todoDiv.innerHTML = `
-            <span>${todo.text}</span><button onclick="removeTodo('${todo.id}')">delete</button>
-            `
+
+            //TODO udelat create elementy
+            const textSpan = document.createElement("span")
+            textSpan.textContent = todo.text
+            todoDiv.appendChild(textSpan)
+
+            const removeButton = document.createElement("button")
+            removeButton.setAttribute("onclick", `removeTodo("${todo.id}")`)
+            removeButton.textContent = "delete"
+            todoDiv.appendChild(removeButton)
+        
             todosDiv.appendChild(todoDiv)
         }
     )
@@ -51,10 +88,11 @@ function render() {
 function addNewTodo() {
     model.addTodo(createNewTodo())
     render()
+    saveModel()
 }
 
 function createNewTodo() {
-    let newTodoTextDiv = document.getElementById("todoText");
+    const newTodoTextDiv = document.getElementById("todoText");
     const text = newTodoTextDiv.value
     newTodoTextDiv.value = ""
     return new Todo(text)
@@ -64,6 +102,7 @@ function createNewTodo() {
 function removeTodo(id) {
     model.removeTodo(id)
     render()
+    saveModel()
 }
 
 
@@ -72,10 +111,4 @@ function generateId() {
     // Convert it to base 36 (numbers + letters), and grab the first 9 characters
     // after the decimal.
     return '_' + Math.random().toString(36).substr(2, 9);
-}
-
-
-function findAncestor(el, cls) {
-    while ((el = el.parentElement) && !el.classList.contains(cls)) ;
-    return el;
 }
