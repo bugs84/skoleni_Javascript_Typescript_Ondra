@@ -34,18 +34,19 @@ class StorageService {
     }
 
     loadModel = () => {
-        const model = new Model()
-        const todosString = storageDao.loadTodos()
-        try {
-            const todos = JSON.parse(todosString)
-            model.todos = new Map(todos)
-        } catch (e) {
-            console.error(e)
-            model.addTodo(new Todo("Koupit Jablka"))
-            model.addTodo(new Todo("Vyluxovat"))
-            model.addTodo(new Todo("Zalít kytky"))
-        }
-        return model
+        storageDao.loadTodos().then((todosString) => {
+            try {
+                const todos = JSON.parse(todosString)
+                model.todos = new Map(todos)
+                render()
+            } catch (e) {
+                console.error(e)
+                newModel.addTodo(new Todo("Koupit Jablka"))
+                newModel.addTodo(new Todo("Vyluxovat"))
+                newModel.addTodo(new Todo("Zalít kytky"))
+            }
+        })
+
     }
 }
 
@@ -63,14 +64,25 @@ class LocalStorageDao {
 class ServerStorageDao {
 
     saveTodos = (todosString) => {
-        localStorage.setItem('todos', todosString)
+        fetch("/todos", {
+            method: "POST",
+            body: todosString
+        }).then(res => {
+            console.debug("Todos saved!")
+        })
     }
 
     loadTodos = () => {
-        return localStorage.getItem('todos')
+        return new Promise(resolve => {
+                fetch("/todos", {
+                    method: "GET"
+                }).then(res => {
+                    resolve(res.text())
+                })
+            }
+        )
     }
 }
-
 
 
 // APPLICATION
@@ -81,11 +93,13 @@ const storageDao = new ServerStorageDao() //THIS CAN BE EXENGED
 
 const storage = new StorageService()
 
-const model = storage.loadModel()
+const model = new Model()
+storage.loadModel()
 
 function saveModel() {
     storage.saveModel(model)
 }
+
 
 function render() {
 
