@@ -1,20 +1,30 @@
 'use strict';
 
 class Model {
-    todos = [
-        new Todo("Koupit Jablka"),
-        new Todo("Vyluxovat"),
-        new Todo("Zalít kytky")
-    ]
+    todos = new Map()
+
+    addTodo = (todo) => {
+        this.todos.set(todo.id, todo)
+    }
+
+    removeTodo = (id) => {
+        this.todos.delete(id)
+    }
+
 }
 
 class Todo {
     constructor(text) {
+        this.id = generateId()
         this.text = text
     }
 }
 
 const model = new Model()
+model.addTodo(new Todo("Koupit Jablka"))
+model.addTodo(new Todo("Vyluxovat"))
+model.addTodo(new Todo("Zalít kytky"))
+
 
 console.log("MODEL")
 console.log(model)
@@ -37,7 +47,7 @@ function render() {
 
 
 function addNewTodo() {
-    model.todos.push(createNewTodo())
+    model.addTodo(createNewTodo())
     render()
 }
 
@@ -46,6 +56,19 @@ function createNewTodo() {
     const text = newTodoTextDiv.value
     newTodoTextDiv.value = ""
     return new Todo(text)
+}
+
+
+function removeTodo(id) {
+
+}
+
+
+function generateId() {
+    // Math.random should be unique because of its seeding algorithm.
+    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+    // after the decimal.
+    return '_' + Math.random().toString(36).substr(2, 9);
 }
 
 // function addNewTodo() {
