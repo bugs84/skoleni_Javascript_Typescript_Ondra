@@ -49,7 +49,6 @@ class Storage {
     }
 }
 
-
 // APPLICATION
 const storage = new Storage()
 
