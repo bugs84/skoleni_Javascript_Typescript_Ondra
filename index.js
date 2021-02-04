@@ -37,7 +37,9 @@ function render() {
 
     model.todos.forEach((todo) => {
             const todoDiv = document.createElement("div")
-            todoDiv.innerHTML = todo.text
+            todoDiv.innerHTML = `
+            <span>${todo.text}</span><button onclick="removeTodo('${todo.id}')">delete</button>
+            `
             todosDiv.appendChild(todoDiv)
         }
     )
@@ -60,7 +62,8 @@ function createNewTodo() {
 
 
 function removeTodo(id) {
-
+    model.removeTodo(id)
+    render()
 }
 
 
