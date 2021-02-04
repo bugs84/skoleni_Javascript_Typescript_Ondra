@@ -57,7 +57,10 @@ class LocalStorageDao {
     }
 
     loadTodos = () => {
-        return localStorage.getItem('todos')
+        return new Promise(resolve => {
+            const todosString = localStorage.getItem('todos');
+            resolve(todosString)
+        })
     }
 }
 
@@ -88,18 +91,20 @@ class ServerStorageDao {
 // APPLICATION
 
 
-// const storageDao = new LocalStorageDao() //THIS CAN BE EXENGED
-const storageDao = new ServerStorageDao() //THIS CAN BE EXENGED
+const storageDao = new LocalStorageDao() //THIS CAN BE EXENGED
+// const storageDao = new ServerStorageDao() //THIS CAN BE EXENGED
 
 const storage = new StorageService()
 
 const model = new Model()
-storage.loadModel()
 
 function saveModel() {
     storage.saveModel(model)
 }
 
+function initialDataLoad() {
+    storage.loadModel()
+}
 
 function render() {
 
