@@ -1,5 +1,3 @@
-'use strict';
-
 // MODEL
 class Model {
 
@@ -97,7 +95,7 @@ class ServerStorageDao implements StorageDao {
         fetch("/todos", {
             method: "POST",
             body: todosString
-        }).then(res => {
+        }).then(() => {
             console.debug("Todos saved!")
         })
     }
