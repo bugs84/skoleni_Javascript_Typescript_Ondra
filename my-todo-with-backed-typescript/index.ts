@@ -67,7 +67,7 @@ class LocalStorageDao {
 
     loadTodos = () => {
         return new Promise<string>(resolve => {
-            const todosString = localStorage.getItem(LocalStorageDao.localStorageKey);
+            const todosString = localStorage.getItem(LocalStorageDao.localStorageKey) ?? "";
             resolve(todosString)
         })
     }
@@ -117,7 +117,11 @@ function initialDataLoad() {
 
 function render() {
 
-    const todosDiv = document.getElementById("todos")
+    const todosHtmlId = "todos";
+    const todosDiv = document.getElementById(todosHtmlId)// ?? throw new Error(`Illegal state. Element with id '${todosHtmlId}' not wound`);
+    if (todosDiv === null) { //TODO why elvis doesn't work
+        throw new Error("AA")
+    }
     todosDiv.innerHTML = ""
 
     model.todos.forEach((todo) => {
