@@ -2,8 +2,8 @@
 
 // MODEL
 class Model {
-    //TODO make private
-    todos = new Map() //map is not best if we want change order of todos, but i want try to use Map
+
+    private todos = new Map<string, Todo>() //map is not best if we want change order of todos, but i want try to use Map
 
     addTodo = (todo: Todo) => {
         this.todos.set(todo.id, todo)
@@ -12,6 +12,21 @@ class Model {
     removeTodo = (id: string) => {
         this.todos.delete(id)
     }
+
+    allTodos = (): Array<Todo> =>
+        Array.from(this.todos.values())
+
+
+    clearAllTodos = () =>
+        this.todos.clear()
+
+    setTodos = (todos: Array<Todo>) => {
+        this.clearAllTodos()
+        todos.forEach(todo =>
+            this.todos.set(todo.id, todo)
+        )
+    }
+
 
 }
 
@@ -27,14 +42,14 @@ class Todo {
 
 // STORAGE
 class StorageService {
-    storageDao: StorageDao  //TODO interface
+    storageDao: StorageDao
 
-    constructor(storageDao: StorageDao) { // TODO - jak to? on rozdejcha ServerStorageDao
+    constructor(storageDao: StorageDao) {
         this.storageDao = storageDao
     }
 
     saveModel = (model: Model) => {
-        const value = JSON.stringify(Array.from(model.todos.entries())); // ouch :(
+        const value = JSON.stringify(model.allTodos()); // ouch :(
 
         this.storageDao.saveTodos(value)
     }
@@ -43,8 +58,8 @@ class StorageService {
 
         this.storageDao.loadTodos().then((todosString) => {
             try {
-                const todos = JSON.parse(todosString)
-                model.todos = new Map(todos)
+                const todos = JSON.parse(todosString) //todo jak to ze mu nevadi any
+                model.setTodos(todos)
                 render()
             } catch (e) {
                 console.error(e)
@@ -62,10 +77,10 @@ interface StorageDao {
     loadTodos: () => Promise<string>
 }
 
-class LocalStorageDao implements StorageDao{
+class LocalStorageDao implements StorageDao {
 
     private static localStorageKey = 'todos';
-    
+
     saveTodos = (todosString: string) => {
         localStorage.setItem(LocalStorageDao.localStorageKey, todosString)
     }
@@ -129,7 +144,7 @@ function render() {
     }
     todosDiv.innerHTML = ""
 
-    model.todos.forEach((todo) => {
+    model.allTodos().forEach((todo) => {
             const todoDiv = document.createElement("div")
 
             const textSpan = document.createElement("span")

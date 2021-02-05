@@ -1,37 +1,22 @@
 [
-  [
-    "_v6z8c5j8c",
-    {
-      "id": "_v6z8c5j8c",
-      "text": "Zalít kytky"
-    }
-  ],
-  [
-    "_o7m3lgf2d",
-    {
-      "id": "_o7m3lgf2d",
-      "text": "Vyluxovat"
-    }
-  ],
-  [
-    "_i5nei657b",
-    {
-      "id": "_i5nei657b",
-      "text": "Utřít prach"
-    }
-  ],
-  [
-    "_xqle9po20",
-    {
-      "id": "_xqle9po20",
-      "text": "Koupit jablka"
-    }
-  ],
-  [
-    "_slaeesnqt",
-    {
-      "id": "_slaeesnqt",
-      "text": "Vše zaverzovat"
-    }
-  ]
+  {
+    "id": "_65b3m6qe4",
+    "text": "Zalít kytky"
+  },
+  {
+    "id": "_xl06lyzwy",
+    "text": "Vyluxovat"
+  },
+  {
+    "id": "_hnd19rk8c",
+    "text": "Utřít prach"
+  },
+  {
+    "id": "_jljlxlu4i",
+    "text": "Koupit jablka"
+  },
+  {
+    "id": "_zltga1xbm",
+    "text": "Vše zaverzovat"
+  }
 ]
