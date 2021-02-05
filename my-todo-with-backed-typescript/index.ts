@@ -5,11 +5,11 @@ class Model {
     //TODO make private
     todos = new Map() //map is not best if we want change order of todos, but i want try to use Map
 
-    addTodo = (todo) => {
+    addTodo = (todo: Todo) => {
         this.todos.set(todo.id, todo)
     }
 
-    removeTodo = (id) => {
+    removeTodo = (id: string) => {
         this.todos.delete(id)
     }
 
@@ -19,7 +19,7 @@ class Todo {
     id: string
     text: string
 
-    constructor(text) {
+    constructor(text: string) {
         this.id = generateId()
         this.text = text
     }
@@ -29,11 +29,11 @@ class Todo {
 class StorageService {
     storageDao: ServerStorageDao  //TODO interface
 
-    constructor(storageDao) {
+    constructor(storageDao: ServerStorageDao) {
         this.storageDao = storageDao
     }
 
-    saveModel = (model) => {
+    saveModel = (model: Model) => {
         const value = JSON.stringify(Array.from(model.todos.entries())); // ouch :(
 
         this.storageDao.saveTodos(value)
@@ -61,7 +61,7 @@ class LocalStorageDao {
 
     private static localStorageKey = 'todos';
     
-    saveTodos = (todosString) => {
+    saveTodos = (todosString: string) => {
         localStorage.setItem(LocalStorageDao.localStorageKey, todosString)
     }
 
@@ -75,7 +75,7 @@ class LocalStorageDao {
 
 class ServerStorageDao {
 
-    saveTodos = (todosString) => {
+    saveTodos = (todosString: string) => {
         fetch("/todos", {
             method: "POST",
             body: todosString
@@ -154,7 +154,7 @@ function createNewTodo() {
 }
 
 
-function removeTodo(id) {
+function removeTodo(id: string) {
     model.removeTodo(id)
     render()
     saveModel()
