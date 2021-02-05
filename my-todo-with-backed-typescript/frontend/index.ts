@@ -136,10 +136,9 @@ function initialDataLoad() { //called from html on page onload
 function render() {
 
     const todosHtmlId = "todos";
-    const todosDiv = document.getElementById(todosHtmlId)// ?? throw new Error(`Illegal state. Element with id '${todosHtmlId}' not wound`);
-    if (todosDiv === null) { //TODO why elvis doesn't work
-        throw new Error("AA")
-    }
+    const todosDiv = document.getElementById(todosHtmlId) ?? function () {
+        throw new Error(`Illegal state. Element with id '${todosHtmlId}' not found`);
+    }()
     todosDiv.innerHTML = ""
 
     model.allTodos().forEach((todo) => {
