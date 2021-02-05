@@ -35,17 +35,13 @@ class StorageService {
 
     saveModel = (model) => {
         const value = JSON.stringify(Array.from(model.todos.entries())); // ouch :(
-        //TODO Remove ts-ignore
 
-        // @ts-ignore
-        storageDao.saveTodos(value)
+        this.storageDao.saveTodos(value)
     }
 
     loadModel = () => {
-        //TODO Remove ts-ignore
 
-        // @ts-ignore
-        storageDao.loadTodos().then((todosString) => {
+        this.storageDao.loadTodos().then((todosString) => {
             try {
                 const todos = JSON.parse(todosString)
                 model.todos = new Map(todos)
@@ -63,13 +59,15 @@ class StorageService {
 
 class LocalStorageDao {
 
+    private static localStorageKey = 'todos';
+    
     saveTodos = (todosString) => {
-        localStorage.setItem('todos', todosString)
+        localStorage.setItem(LocalStorageDao.localStorageKey, todosString)
     }
 
     loadTodos = () => {
-        return new Promise(resolve => {
-            const todosString = localStorage.getItem('todos');
+        return new Promise<string>(resolve => {
+            const todosString = localStorage.getItem(LocalStorageDao.localStorageKey);
             resolve(todosString)
         })
     }
@@ -87,7 +85,7 @@ class ServerStorageDao {
     }
 
     loadTodos = () => {
-        return new Promise(resolve => {
+        return new Promise<string>(resolve => {
                 fetch("/todos", {
                     method: "GET"
                 }).then(res => {
