@@ -1,10 +1,20 @@
 {
-  "name": "nodejssample",
+  "name": "typescriptfrontend",
   "version": "1.0.0",
   "description": "",
-  "main": "project.js",
+  "main": "index.js",
+  "dependencies": {
+    "jasmine": "3.5.0"
+  },
+  "devDependencies": {
+    "typescript": "3.7.3",
+    "@types/jasmine": "2.8.7"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "tsc",
+    "watch": "tsc -w",
+    "init": "tsc --init",
+    "test": "npm run compile && jasmine JASMINE_CONFIG_PATH=jasmine.json"
   },
   "author": "",
   "license": "ISC"

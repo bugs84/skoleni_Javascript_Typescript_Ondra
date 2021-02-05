@@ -2,6 +2,7 @@
 
 // MODEL
 class Model {
+    //TODO make private
     todos = new Map() //map is not best if we want change order of todos, but i want try to use Map
 
     addTodo = (todo) => {
@@ -15,6 +16,9 @@ class Model {
 }
 
 class Todo {
+    id: string
+    text: string
+
     constructor(text) {
         this.id = generateId()
         this.text = text
@@ -23,6 +27,7 @@ class Todo {
 
 // STORAGE
 class StorageService {
+    storageDao: ServerStorageDao  //TODO interface
 
     constructor(storageDao) {
         this.storageDao = storageDao
@@ -30,10 +35,16 @@ class StorageService {
 
     saveModel = (model) => {
         const value = JSON.stringify(Array.from(model.todos.entries())); // ouch :(
+        //TODO Remove ts-ignore
+
+        // @ts-ignore
         storageDao.saveTodos(value)
     }
 
     loadModel = () => {
+        //TODO Remove ts-ignore
+
+        // @ts-ignore
         storageDao.loadTodos().then((todosString) => {
             try {
                 const todos = JSON.parse(todosString)
@@ -41,9 +52,9 @@ class StorageService {
                 render()
             } catch (e) {
                 console.error(e)
-                newModel.addTodo(new Todo("Koupit Jablka"))
-                newModel.addTodo(new Todo("Vyluxovat"))
-                newModel.addTodo(new Todo("Zalít kytky"))
+                model.addTodo(new Todo("Koupit Jablka"))
+                model.addTodo(new Todo("Vyluxovat"))
+                model.addTodo(new Todo("Zalít kytky"))
             }
         })
 
@@ -91,10 +102,10 @@ class ServerStorageDao {
 // APPLICATION
 
 
- // const storageDao = new LocalStorageDao() //THIS CAN BE EXCHANGED
+// const storageDao = new LocalStorageDao() //THIS CAN BE EXCHANGED
 const storageDao = new ServerStorageDao() //THIS CAN BE EXCHANGED
 
-const storage = new StorageService()
+const storage = new StorageService(storageDao)
 
 const model = new Model()
 
@@ -138,7 +149,7 @@ function addNewTodo() {
 }
 
 function createNewTodo() {
-    const newTodoTextDiv = document.getElementById("todoText");
+    const newTodoTextDiv = document.getElementById("todoText") as HTMLInputElement;
     const text = newTodoTextDiv.value
     newTodoTextDiv.value = ""
     return new Todo(text)
