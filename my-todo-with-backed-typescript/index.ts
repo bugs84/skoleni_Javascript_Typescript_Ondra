@@ -27,9 +27,9 @@ class Todo {
 
 // STORAGE
 class StorageService {
-    storageDao: ServerStorageDao  //TODO interface
+    storageDao: StorageDao  //TODO interface
 
-    constructor(storageDao: ServerStorageDao) {
+    constructor(storageDao: StorageDao) { // TODO - jak to? on rozdejcha ServerStorageDao
         this.storageDao = storageDao
     }
 
@@ -57,7 +57,12 @@ class StorageService {
     }
 }
 
-class LocalStorageDao {
+interface StorageDao {
+    saveTodos: (todosString: string) => void
+    loadTodos: () => Promise<string>
+}
+
+class LocalStorageDao implements StorageDao{
 
     private static localStorageKey = 'todos';
     
@@ -73,7 +78,7 @@ class LocalStorageDao {
     }
 }
 
-class ServerStorageDao {
+class ServerStorageDao implements StorageDao {
 
     saveTodos = (todosString: string) => {
         fetch("/todos", {
@@ -101,7 +106,7 @@ class ServerStorageDao {
 
 
 // const storageDao = new LocalStorageDao() //THIS CAN BE EXCHANGED
-const storageDao = new ServerStorageDao() //THIS CAN BE EXCHANGED
+const storageDao: StorageDao = new ServerStorageDao() //THIS CAN BE EXCHANGED
 
 const storage = new StorageService(storageDao)
 
