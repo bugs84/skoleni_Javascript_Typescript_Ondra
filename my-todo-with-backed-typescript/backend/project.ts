@@ -1,8 +1,8 @@
 import * as http from "http"
-import {IncomingMessage, ServerResponse} from "http";
+import {IncomingMessage, ServerResponse} from "http"
 
-import { promises as fs } from 'fs';
-var path = require('path');
+import {promises as fs} from 'fs'
+import * as path from "path"
 
 const requestListener = function (req: IncomingMessage, res: ServerResponse) {
     console.log("DIRNAME:")
@@ -37,7 +37,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
                         })
                     break
                 case "POST" :
-                    let bodyBytes:any = [];
+                    const bodyBytes: any = []
                     req.on('data', (chunk) => {
                         bodyBytes.push(chunk);
                     }).on('end', () => {
