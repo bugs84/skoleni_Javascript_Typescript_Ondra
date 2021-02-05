@@ -16,7 +16,6 @@ class Model {
     allTodos = (): Array<Todo> =>
         Array.from(this.todos.values())
 
-
     clearAllTodos = () =>
         this.todos.clear()
 
@@ -26,7 +25,6 @@ class Model {
             this.todos.set(todo.id, todo)
         )
     }
-
 
 }
 
@@ -49,7 +47,7 @@ class StorageService {
     }
 
     saveModel = (model: Model) => {
-        const value = JSON.stringify(model.allTodos()); // ouch :(
+        const value = JSON.stringify(model.allTodos());
 
         this.storageDao.saveTodos(value)
     }
@@ -58,7 +56,7 @@ class StorageService {
 
         this.storageDao.loadTodos().then((todosString) => {
             try {
-                const todos = JSON.parse(todosString) //todo jak to ze mu nevadi any
+                const todos: Array<Todo> = JSON.parse(todosString)
                 model.setTodos(todos)
                 render()
             } catch (e) {
@@ -131,7 +129,7 @@ function saveModel() {
     storage.saveModel(model)
 }
 
-function initialDataLoad() {
+function initialDataLoad() { //called from html on page onload
     storage.loadModel()
 }
 
