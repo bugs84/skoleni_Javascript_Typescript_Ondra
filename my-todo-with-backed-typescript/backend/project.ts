@@ -1,8 +1,10 @@
-const http = require('http');
-const fs = require('fs').promises;
+import * as http from "http"
+import {IncomingMessage, ServerResponse} from "http";
+
+import { promises as fs } from 'fs';
 var path = require('path');
 
-const requestListener = function (req, res) {
+const requestListener = function (req: IncomingMessage, res: ServerResponse) {
     console.log("DIRNAME:")
     console.log(path.join(__dirname, "../frontend/index.html"))
 
@@ -35,7 +37,7 @@ const requestListener = function (req, res) {
                         })
                     break
                 case "POST" :
-                    let bodyBytes = [];
+                    let bodyBytes:any = [];
                     req.on('data', (chunk) => {
                         bodyBytes.push(chunk);
                     }).on('end', () => {
