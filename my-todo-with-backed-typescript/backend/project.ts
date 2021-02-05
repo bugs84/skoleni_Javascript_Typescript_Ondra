@@ -35,11 +35,11 @@ const requestListener = function (req, res) {
                         })
                     break
                 case "POST" :
-                    let body = [];
+                    let bodyBytes = [];
                     req.on('data', (chunk) => {
-                        body.push(chunk);
+                        bodyBytes.push(chunk);
                     }).on('end', () => {
-                        body = Buffer.concat(body).toString();
+                        const body = Buffer.concat(bodyBytes).toString();
                         // at this point, `body` has the entire request body stored in it as a string
                         fs.writeFile(path.join(__dirname, "storage/todos.json"), body)
                         res.writeHead(204);
